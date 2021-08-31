@@ -1,0 +1,17 @@
+SymbolTable
+	Symbol
+		name
+		datatype
+		T value
+		symbolNext
+
+	Scope (List of symbol)
+		symbolHead
+		symbolCurrent
+		scopeNext
+		Size
+
+	// list of scope
+	scopeHead
+	scopeCurrent
+	Size
