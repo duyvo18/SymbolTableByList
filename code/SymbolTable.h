@@ -13,7 +13,7 @@ private:
 
     Scope* scopeHead;
     Scope* scopeCurrent;
-    int size;
+    int levelIndex;
 
 
     class Symbol
@@ -24,7 +24,37 @@ private:
         T data;
         Symbol* symbolNext;
     public:
+        Symbol(string name, string datatype)
+        {
+            this->name = name;
+            this->datatype = datatype;
+            symbolNext = NULL;
+        } 
 
+        void setName(string name)
+        {
+            this->name = name;
+        }
+
+        void setDatatype(string datatype) 
+        { 
+            this->datatype = datatype;
+        }
+
+        string getName()
+        {
+            return this->name;
+        }
+
+        string getDatatype()
+        {
+            return this->datatype;
+        }
+
+        T getData()
+        {
+            return this->data;
+        }
     };
 
     class Scope
@@ -33,17 +63,40 @@ private:
         Symbol* symbolHead;
         Symbol* symbolCurrent;
         Scope* scopeNext;
-        int size;
+        int level;
     public:
-
+        Scope()
+        {
+            symbolHead = new Symbol();
+            symbolCurrent = NULL;
+            symbolNext = NULL;
+            level = levelIndex;
+        }
     };
 
 
-
+// what the current pointers are for Kuo ? -_- 
     
 
 public:
-    SymbolTable() {}
+    SymbolTable()
+    {
+        levelIndex = 0;
+        scopeHead = new Scope();
+        scopeCurrent = NULL;
+        scopeNext = NULL;
+    }
+
     void run(string filename);
+
+    void INSERT(string name, string datatype)
+    {
+
+    }
+
+    void ASSIGN(string name, T value)
+    {
+
+    }
 };
 #endif

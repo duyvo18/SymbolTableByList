@@ -9,9 +9,27 @@ SymbolTable
 		symbolHead
 		symbolCurrent
 		scopeNext
-		Size
+		level (the scope behaves like {} in C++, yes I know Kuo -_- fuck that)
 
 	// list of scope
 	scopeHead
 	scopeCurrent
-	Size
+	levelIndex
+
+	? well basically 
+	BEGIN is called
+		levelIndex++
+		create a scope, level = levelIndex, link the scope.
+	
+	INSERT is called
+		create a symbol		
+		link created symbol scope with level = levelIndex
+
+	question: can there be two scopes with the same level 
+	or I can say 
+	BEGIN 
+	END
+	BEGIN 
+	END
+
+	! check classes constructors 
