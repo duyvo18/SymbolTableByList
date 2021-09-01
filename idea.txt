@@ -33,3 +33,25 @@ SymbolTable
 	END
 
 	! check classes constructors 
+
+
+
+
+	template <typename T>
+	void SymbolTable<T>::run(string filename)
+	{
+		/*
+		open "filename"
+			ifstream fin()
+		while not eof
+			read line
+				string line;
+				std::getline(fin, line);
+			resolve
+		end
+
+		// scope error
+		throw InvalidInstruction(line)
+
+		*/
+	}

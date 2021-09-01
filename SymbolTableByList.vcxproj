@@ -148,6 +148,7 @@
     <ClInclude Include="code\SymbolTable.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="idea.txt" />
     <Text Include="testcase\test1.txt" />
     <Text Include="testcase\test2.txt" />
     <Text Include="testcase\test3.txt" />
