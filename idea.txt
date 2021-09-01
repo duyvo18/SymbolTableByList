@@ -61,3 +61,14 @@
 	RPRINT
 		đọc ngược linked list
 		-> doubly linked list ???
+
+
+	SCOPE OVERWRITE
+		int x = 2;
+	
+		{
+			int x = 1;
+			cout << x;	// 1
+		}
+	
+		cout << x;		// 2
