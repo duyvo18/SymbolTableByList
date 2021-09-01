@@ -1,4 +1,4 @@
-SymbolTable
+﻿SymbolTable
 	Symbol
 		name
 		datatype
@@ -55,3 +55,9 @@ SymbolTable
 
 		*/
 	}
+
+
+
+	RPRINT
+		đọc ngược linked list
+		-> doubly linked list ???

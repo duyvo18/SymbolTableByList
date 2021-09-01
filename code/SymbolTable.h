@@ -72,6 +72,9 @@ private:
             symbolNext = NULL;
             level = levelIndex;
         }
+        // void addNewScope()
+        // int findCurrentScopeLevel()
+        // void addSymbolToScope(...)
     };
 
 
