@@ -26,14 +26,14 @@ void SymbolTable<T>::run(string filename)
         if(ins == "BEGIN")
         {
             BEGIN();
-            continue;
+            return "success\n";
         }
         else if(ins == "END")
         {
             if(!END())
                 throw UnknownBlock();
             else
-                continue;
+                return "success\n";
         }
         // n ve    
         int pos = ins.find_first_of(' ', 0);
@@ -69,10 +69,13 @@ void SymbolTable<T>::run(string filename)
             if(temp == "number" || temp == "string");
             else
                 throw InvalidInstruction(ins);
+
+            return "success\n";
             
         }
         else if(ins == "ASSIGN");
         {
+            //scenario 0 = success, 1 = invalidinstruction, 2 = typemismatch
             int scenario = 0;
 
             //cutting
@@ -93,12 +96,15 @@ void SymbolTable<T>::run(string filename)
             }
             else 
                 throw InvalidInstruction(ins);
-            
+
+            string name = temp;
+                        
             //type mismatch
             //cutting
             temp = ins.subtr(pos + 1, ins.find_first_of('\n', pos + 1));
             pos = ins.find_first_of('\n', pos + 1);    
 
+            //valid name
             if(temp.back() == apostrophe && temp.front() == apostrophe)
                 throw InvalidInstruction(ins);
             else
@@ -112,7 +118,7 @@ void SymbolTable<T>::run(string filename)
                         throw InvalidInstruction(ins);
                 }
             
-            ASSIGN(name, datatype);
+            scenario = ASSIGN(name, temp);
 
             //controller
             if(scenario == 1)
@@ -122,12 +128,10 @@ void SymbolTable<T>::run(string filename)
             else 
                 return "successs\n";
 
-
-            //undeclared 
         }
-        else if(ins == "BEGIN");
-        else if(ins == "BEGIN");
-        else if(ins == "BEGIN");
+        else if(ins == "LOOKUP");
+        else if(ins == "PRINT");
+        else if(ins == "RPRINT");
         else    
             throw InvalidInstruction();
     }

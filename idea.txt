@@ -136,5 +136,8 @@ SymbolTable (List of scope)
 
     
     INSERT return.
-    ASSIGN typemismatch -> ASSIGN -> findSymbol adjust.
+    ASSIGN typemismatch -> ASSIGN -> findSymbol adjust. 
+
+    ASSIGN value covert (?) new way to check digit 
+
     

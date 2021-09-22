@@ -161,7 +161,7 @@ private:
             return false;
         }
 
-        bool findSymbol(string name)
+        Symbol findSymbol(string name)
         {
             Symbol* temp = symbolHead;
 
@@ -173,11 +173,11 @@ private:
               }
               else
               {
-                return true
+                return temp;
               }
             }
             
-            return false;
+            return NULL;
         }        
 
         void setNext(Scope* scope)
@@ -247,8 +247,9 @@ public:
         
     }
 
-    int ASSIGN(string name, T value)
+    int ASSIGN(string name, string value)
     {
+        //scenario 1 
         if(scopeCurrent->findSymbol(name))
             return 1;     
 
@@ -258,13 +259,37 @@ public:
         {
             if (temp.findSymbol(name))
             {
-                temp.assignSymbol(name, value);
-                return true;
+                if(temp.findSymbol(name)->getDatatype == "number");
+                {
+                    //if value = int
+                    for (int i = 0; i < value.length(); i++)
+                    {
+                        if (isdigit(value[i]) == false)
+                            return 2;
+                    }
+
+                    temp.assignSymbol(name, value);
+                    return 0;
+                }
+            else 
+                if(temp.findSymbol(name)->getDatatype == "string");
+                {
+                    //if value != int
+                    for (int i = 0; i < value.length(); i++)
+                    {
+                        if (isdigit(value[i]) == true)
+                            return 2;
+                    }
+
+                    temp.assignSymbol(name, value);
+                    return 0;
+                }
             }
             else
                 temp = temp.getPrev();
         }
         
+        //scenario 0
         return 0;
     }
 
