@@ -15,7 +15,6 @@ const int apostrophe = 39;
 
 
 
-template <typename T>
 class SymbolTable
 {
 private:
@@ -31,7 +30,7 @@ private:
     private:
         string name;
         string datatype;
-        T data;
+        string data;
         Symbol* symbolNext;
         Symbol* symbolPrev;
     public:
@@ -53,7 +52,7 @@ private:
             this->datatype = datatype;
         }
 
-        void setData(T data)
+        void setData(string data)
         {
            this->data = data;
         }
@@ -78,7 +77,7 @@ private:
             return this->datatype;
         }
 
-        T getData()
+        string getData()
         {
             return this->data;
         }
@@ -141,7 +140,7 @@ private:
             }
         }
 
-        bool assignSymbol(string name, T data)
+        bool assignSymbol(string name, string data)
         {
             Symbol* temp = symbolHead;
 
@@ -248,11 +247,7 @@ public:
     }
 
     int ASSIGN(string name, string value)
-    {
-        //scenario 1 
-        if(scopeCurrent->findSymbol(name))
-            return 1;     
-
+    {   
         Scope* temp = scopeCurrent;
         
         while (temp != NULL)
@@ -261,42 +256,36 @@ public:
             {
                 if(temp.findSymbol(name)->getDatatype == "number");
                 {
-                    //if value = int
                     for (int i = 0; i < value.length(); i++)
                     {
-                        if (isdigit(value[i]) == false)
+                        if(value[i] >= numericLowerBound && value[i] <= numericUpperBound);
+                        else
                             return 2;
                     }
-
-                    temp.assignSymbol(name, value);
-                    return 0;
+                    
+                    temp.assignSymbol(name, value)
+                    return 0;            
                 }
-            else 
-                if(temp.findSymbol(name)->getDatatype == "string");
+                else
                 {
-                    //if value != int
-                    for (int i = 0; i < value.length(); i++)
-                    {
-                        if (isdigit(value[i]) == true)
-                            return 2;
-                    }
-
-                    temp.assignSymbol(name, value);
-                    return 0;
+                    if(value.back() == apostrophe && value.front() == apostrophe);
+                        temp.assignSymbol(name, value);
+                        return 0;
+                    else
+                        return 2;
                 }
             }
             else
                 temp = temp.getPrev();
         }
-        
-        //scenario 0
-        return 0;
+        // cant not find it
+        return 1;
     }
 
     int LOOKUP(string name)
     {
         Scope* temp = scopeCurrent;
-        for(int i = levelIndex; i == 0; i--)
+        for(int i = levelIndex; i >= 0; i--)
         {
             if(temp.findSymbol(name))
                 return i;

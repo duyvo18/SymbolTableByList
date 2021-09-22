@@ -35,6 +35,21 @@ void SymbolTable<T>::run(string filename)
             else
                 return "success\n";
         }
+        else if(temp == "PRINT")
+        {
+            PRINT();
+            return endl;
+        }
+        else if(temp == "RPRINT")
+        {
+            RPRINT();
+            return endl;
+        }
+        else
+            
+
+
+
         // n ve    
         int pos = ins.find_first_of(' ', 0);
         temp = ins.substr(0, pos);
@@ -73,7 +88,7 @@ void SymbolTable<T>::run(string filename)
             return "success\n";
             
         }
-        else if(ins == "ASSIGN");
+        else if(temp == "ASSIGN");
         {
             //scenario 0 = success, 1 = invalidinstruction, 2 = typemismatch
             int scenario = 0;
@@ -129,11 +144,21 @@ void SymbolTable<T>::run(string filename)
                 return "successs\n";
 
         }
-        else if(ins == "LOOKUP");
-        else if(ins == "PRINT");
-        else if(ins == "RPRINT");
+        else if(temp == "LOOKUP")
+        {
+            temp = ins.subtr(pos + 1, ins.find_first_of('\n', pos + 1));
+            pos = ins.find_first_of('\n', pos + 1);
+            
+            if(LOOKUP(temp) != -1)
+            {
+                cout << LOOKUP(temp);
+                return endl;
+            }
+            else 
+                throw Underclared(ins);
+        }
         else    
-            throw InvalidInstruction();
+            throw InvalidInstruction(ins);
     }
 
     // check
