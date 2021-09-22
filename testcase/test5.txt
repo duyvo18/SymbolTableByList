@@ -1,16 +1,10 @@
-INSERT a string
-INSERT b number
+INSERT x number
+INSERT y string
+ASSIGN x 15
 BEGIN
-INSERT c number
-ASSIGN b 12
-BEGIN
-INSERT a number
-BEGIN
-ASSIGN c 14
-LOOKUP a
-LOOKUP b
-PRINT
+INSERT y number
+INSERT x string
+LOOKUP y
+LOOKUP x
 END
-END
-LOOKUP a
-END
+LOOKUP x

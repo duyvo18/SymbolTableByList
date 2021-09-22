@@ -1,5 +1,6 @@
 #include "SymbolTable.h"
 
+
 void SymbolTable::run(string filename)
 {
 	ifstream fin;
@@ -42,6 +43,10 @@ void SymbolTable::run(string filename)
 				pos = ins.find_first_of(' ', pos + 1);
 
 				//valid name
+				if (!isIden(temp))
+					throw InvalidInstruction(ins);
+				
+				/*
 				if (temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
 				{
 					for (int i = 0; i < temp.length(); i++)
@@ -55,6 +60,7 @@ void SymbolTable::run(string filename)
 				}
 				else
 					throw InvalidInstruction(ins);
+				*/
 
 				//cutting
 				string data = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
@@ -80,6 +86,10 @@ void SymbolTable::run(string filename)
 				pos = ins.find_first_of(' ', pos + 1);
 
 				//valid name
+				if (!isIden(temp))
+					throw InvalidInstruction(ins);
+
+				/*
 				if (temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
 				{
 					for (int i = 1; i < temp.length(); i++)
@@ -93,27 +103,13 @@ void SymbolTable::run(string filename)
 				}
 				else
 					throw InvalidInstruction(ins);
+				*/
 
 				string name = temp;
 
-				//type mismatch
 				//cutting
 				temp = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
 				pos = ins.find_first_of('\n', pos + 1);
-
-				//valid name
-				if (temp.back() == apostrophe && temp.front() == apostrophe)
-					throw InvalidInstruction(ins);
-				else
-					for (int i = 0; i < temp.length(); i++)
-					{
-						if (temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound);
-						else if (temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
-						else if (temp[i] >= uppercaseLowerBound && temp[i] <= uppercaseUpperBound);
-						else if (temp[i] == space);
-						else
-							throw InvalidInstruction(ins);
-					}
 
 				scenario = ASSIGN(name, temp);
 
@@ -122,6 +118,8 @@ void SymbolTable::run(string filename)
 					throw InvalidInstruction(ins);
 				else if (scenario == 2)
 					throw TypeMismatch(ins);
+				else if (scenario == 3)
+					throw Undeclared(ins);
 				else
 					cout << "success\n";
 			}
@@ -129,6 +127,9 @@ void SymbolTable::run(string filename)
 			{
 				temp = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
 				pos = ins.find_first_of('\n', pos + 1);
+
+				if (!isIden(temp))
+					throw InvalidInstruction(ins);
 
 				if (LOOKUP(temp) != -1)
 				{

@@ -140,4 +140,25 @@ SymbolTable (List of scope)
 
     ASSIGN value covert (?) new way to check digit 
 
-    
+===================================================================================
+
+    // ASSIGN negative number
+
+	ASSIGN value as identifier
+		find name
+		if not found
+		if var
+		if number
+		if string
+
+
+
+	New funs
+		SymbolTable::isNum(string str)
+		SymbolTable::isStr(string str)
+		SymbolTable::isIden(string name)
+		SymbolTable::findIden(string name)
+
+	Use new funcs for logics in
+		SymbolTable::run(...)		in case INSERT, ASSIGN, LOOKUP
+		SymbolTable::ASSIGN(...)
