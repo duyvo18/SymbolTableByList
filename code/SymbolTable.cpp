@@ -1,165 +1,149 @@
 #include "SymbolTable.h"
 
-const int lowercaseLowerBound = 97;
-const int lowercaseUpperBound = 122;
-const int uppercaseLowerBound = 65;
-const int uppercaseUpperBound = 90;
-const int numericLowerBound = 48;
-const int numericUpperBound = 57;
-const int space = 32;
-const int underscore = 95;
-const int apostrophe = 39;
-
-template <typename T>
-void SymbolTable<T>::run(string filename)
+void SymbolTable::run(string filename)
 {
-    ifstream fin;
-    fin.open(filename); 
-    
-    while(!fin.eof())
-    {
-        string ins;
-        string temp;
-        getline(fin, ins, '\n');
-        
-        //1 ve
-        if(ins == "BEGIN")
-        {
-            BEGIN();
-            return "success\n";
-        }
-        else if(ins == "END")
-        {
-            if(!END())
-                throw UnknownBlock();
-            else
-                return "success\n";
-        }
-        else if(temp == "PRINT")
-        {
-            PRINT();
-            return endl;
-        }
-        else if(temp == "RPRINT")
-        {
-            RPRINT();
-            return endl;
-        }
-        else
-            
+	ifstream fin;
+	fin.open(filename);
 
+	while (!fin.eof())
+	{
+		string temp;
+		string ins;
+		getline(fin, ins, '\n');
 
+		//1 ve
+		if (ins == "BEGIN")
+		{
+			BEGIN();
+		}
+		else if (ins == "END")
+		{
+			if (!END())
+				throw UnknownBlock();
+		}
+		else if (ins == "PRINT")
+		{
+			cout << PRINT() << endl;
+		}
+		else if (ins == "RPRINT")
+		{
+			cout << RPRINT() << endl;
+		}
+		else
+		{
+			// n ve 
+			size_t pos = ins.find_first_of(' ', 0);
+			temp = ins.substr(0, pos);
 
-        // n ve    
-        int pos = ins.find_first_of(' ', 0);
-        temp = ins.substr(0, pos);
-        //https://www.cplusplus.com/reference/string/string/
+			if (temp == "INSERT")
+			{
+				//cutting
+				temp = ins.substr(pos + 1, ins.find_first_of(' ', pos + 1) - (pos + 1));
+				pos = ins.find_first_of(' ', pos + 1);
 
-        if(temp == "INSERT")
-        {
-            //cutting
-            temp = ins.subtr(pos + 1, ins.find_first_of(' ', pos + 1));
-            pos = ins.find_first_of(' ', pos + 1);
+				//valid name
+				if (temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
+				{
+					for (int i = 0; i < temp.length(); i++)
+					{
+						if (temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound);
+						else if (temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
+						else if (temp[i] == underscore);
+						else
+							throw InvalidInstruction(ins);
+					}
+				}
+				else
+					throw InvalidInstruction(ins);
 
-            //valid name
-            if(temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
-            {
-                for(int i = 1; i <= temp.length(); i++)
-                {
-                    if(temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound); 
-                    else if(temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
-                    else if(temp[i] == underscore);
-                    else
-                        throw InvalidInstruction(ins);
-                }
-            }
-            else 
-                throw InvalidInstruction(ins);
+				//cutting
+				string data = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
+				pos = ins.find_first_of('\n', pos + 1);
 
-            //cutting
-            temp = ins.subtr(pos + 1, ins.find_first_of('\n', pos + 1));
-            pos = ins.find_first_of('\n', pos + 1);
+				//valid datatype
+				if (data == "number" || data == "string");
+				else
+					throw InvalidInstruction(ins);
 
-            //valid datatype
-            if(temp == "number" || temp == "string");
-            else
-                throw InvalidInstruction(ins);
+				if (INSERT(temp, data))
+					cout << "success\n";
+				else
+					throw Redeclared(ins);
+			}
+			else if (temp == "ASSIGN")
+			{
+				//scenario 0 = success, 1 = invalidinstruction, 2 = typemismatch
+				int scenario = 0;
 
-            return "success\n";
-            
-        }
-        else if(temp == "ASSIGN");
-        {
-            //scenario 0 = success, 1 = invalidinstruction, 2 = typemismatch
-            int scenario = 0;
+				//cutting
+				temp = ins.substr(pos + 1, ins.find_first_of(' ', pos + 1) - (pos + 1));
+				pos = ins.find_first_of(' ', pos + 1);
 
-            //cutting
-            temp = ins.subtr(pos + 1, ins.find_first_of(' ', pos + 1));
-            pos = ins.find_first_of(' ', pos + 1);
+				//valid name
+				if (temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
+				{
+					for (int i = 1; i < temp.length(); i++)
+					{
+						if (temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound);
+						else if (temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
+						else if (temp[i] == underscore);
+						else
+							throw InvalidInstruction(ins);
+					}
+				}
+				else
+					throw InvalidInstruction(ins);
 
-            //valid name
-            if(temp[0] >= lowercaseLowerBound && temp[0] <= lowercaseUpperBound)
-            {
-                for(int i = 1; i <= temp.length(); i++)
-                {
-                    if(temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound); 
-                    else if(temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
-                    else if(temp[i] == underscore);
-                    else
-                        throw InvalidInstruction(ins);
-                }
-            }
-            else 
-                throw InvalidInstruction(ins);
+				string name = temp;
 
-            string name = temp;
-                        
-            //type mismatch
-            //cutting
-            temp = ins.subtr(pos + 1, ins.find_first_of('\n', pos + 1));
-            pos = ins.find_first_of('\n', pos + 1);    
+				//type mismatch
+				//cutting
+				temp = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
+				pos = ins.find_first_of('\n', pos + 1);
 
-            //valid name
-            if(temp.back() == apostrophe && temp.front() == apostrophe)
-                throw InvalidInstruction(ins);
-            else
-                for(int i = 1; i <= temp.length(); i++)
-                {
-                    if(temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound); 
-                    else if(temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
-                    else if(temp[i] >= uppercaseLowerBound && temp[i] <= uppercaseUpperBound);
-                    else if(temp[i] == space);
-                    else
-                        throw InvalidInstruction(ins);
-                }
-            
-            scenario = ASSIGN(name, temp);
+				//valid name
+				if (temp.back() == apostrophe && temp.front() == apostrophe)
+					throw InvalidInstruction(ins);
+				else
+					for (int i = 0; i < temp.length(); i++)
+					{
+						if (temp[i] >= lowercaseLowerBound && temp[i] <= lowercaseUpperBound);
+						else if (temp[i] >= numericLowerBound && temp[i] <= numericUpperBound);
+						else if (temp[i] >= uppercaseLowerBound && temp[i] <= uppercaseUpperBound);
+						else if (temp[i] == space);
+						else
+							throw InvalidInstruction(ins);
+					}
 
-            //controller
-            if(scenario == 1)
-                throw InvalidInstruction(ins);
-            else if(scenario == 2)
-                throw TypeMismatch(ins);
-            else 
-                return "successs\n";
+				scenario = ASSIGN(name, temp);
 
-        }
-        else if(temp == "LOOKUP")
-        {
-            temp = ins.subtr(pos + 1, ins.find_first_of('\n', pos + 1));
-            pos = ins.find_first_of('\n', pos + 1);
-            
-            if(LOOKUP(temp) != -1)
-            {
-                cout << LOOKUP(temp);
-                return endl;
-            }
-            else 
-                throw Underclared(ins);
-        }
-        else    
-            throw InvalidInstruction(ins);
-    }
+				//controller
+				if (scenario == 1)
+					throw InvalidInstruction(ins);
+				else if (scenario == 2)
+					throw TypeMismatch(ins);
+				else
+					cout << "success\n";
+			}
+			else if (temp == "LOOKUP")
+			{
+				temp = ins.substr(pos + 1, ins.find_first_of('\n', pos + 1) - (pos + 1));
+				pos = ins.find_first_of('\n', pos + 1);
 
-    // check
+				if (LOOKUP(temp) != -1)
+				{
+					cout << LOOKUP(temp);
+					cout << endl;
+				}
+				else
+					throw Undeclared(ins);
+			}
+			else
+				throw InvalidInstruction(ins);
+		}
+	}
+
+	// check scope level
+	if (levelIndex != 0)
+		throw UnclosedBlock(levelIndex);
 }

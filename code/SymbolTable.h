@@ -18,359 +18,365 @@ const int apostrophe = 39;
 class SymbolTable
 {
 private:
-    class Symbol;
-    class Scope;
+	class Symbol;
+	class Scope;
 
-    Scope* scopeHead;
-    Scope* scopeCurrent; // pointer to current scope
-    int level; // current scope index
+	Scope* scopeHead;
+	Scope* scopeCurrent; // pointer to current scope
+	int levelIndex; // current scope index
 
-    class Symbol
-    {
-    private:
-        string name;
-        string datatype;
-        string data;
-        Symbol* symbolNext;
-        Symbol* symbolPrev;
-    public:
-        Symbol(string name, string datatype)
-        {
-            this->name = name;
-            this->datatype = datatype;
-            symbolNext = NULL;
-            symbolPrev = NULL;
-        }
-        
-        void setName(string name)
-        {
-            this->name = name;
-        }
+	class Symbol
+	{
+	private:
+		string name;
+		string datatype;
+		string data;
+		Symbol* symbolNext;
+		Symbol* symbolPrev;
+	public:
+		Symbol(string name, string datatype)
+		{
+			this->name = name;
+			this->datatype = datatype;
+			symbolNext = NULL;
+			symbolPrev = NULL;
+		}
 
-        void setDatatype(string datatype) 
-        { 
-            this->datatype = datatype;
-        }
+		void setName(string name)
+		{
+			this->name = name;
+		}
 
-        void setData(string data)
-        {
-           this->data = data;
-        }
+		void setDatatype(string datatype)
+		{
+			this->datatype = datatype;
+		}
 
-        void setNext(Symbol* symbol)
-        {
-          symbolNext = symbol;
-        }
+		void setData(string data)
+		{
+			this->data = data;
+		}
 
-        void setPrev(Symbol* symbol)
-        {
-          symbolPrev = symbol;
-        }
+		void setNext(Symbol* symbol)
+		{
+			symbolNext = symbol;
+		}
 
-        string getName()
-        {
-            return this->name;
-        }
+		void setPrev(Symbol* symbol)
+		{
+			symbolPrev = symbol;
+		}
 
-        string getDatatype()
-        {
-            return this->datatype;
-        }
+		string getName()
+		{
+			return this->name;
+		}
 
-        string getData()
-        {
-            return this->data;
-        }
+		string getDatatype()
+		{
+			return this->datatype;
+		}
 
-        Symbol* getNext()
-        {
-            return symbolNext;
-        }
+		string getData()
+		{
+			return this->data;
+		}
 
-        Symbol* getPrev()
-        {
-            return symbolPrev;
-        }
-    };
+		Symbol* getNext()
+		{
+			return symbolNext;
+		}
 
-    class Scope
-    {
-    private:
-        Symbol* symbolHead;
-        Symbol* symbolCurrent;
-        Scope* scopeNext;
-        Scope* scopePrev;
-    public:
-        Scope()
-        {
-            symbolHead = NULL;
-            symbolCurrent = NULL;
-            scopeNext = NULL;
-            scopePrev - NULL;
-        }
+		Symbol* getPrev()
+		{
+			return symbolPrev;
+		}
+	};
 
-        ~Scope()
-        {
-            while(symbolCurrent != NULL)
-            {
-                Symbol* temp = symbolCurrent;
+	class Scope
+	{
+	private:
+		Symbol* symbolHead;
+		Symbol* symbolCurrent;
+		Scope* scopeNext;
+		Scope* scopePrev;
+	public:
+		Scope()
+		{
+			symbolHead = NULL;
+			symbolCurrent = NULL;
+			scopeNext = NULL;
+			scopePrev = NULL;
+		}
 
-                symbolCurrent = symbolCurrent->getPrev(); 
-                symbolCurrent->getNext() = NULL;
+		~Scope()
+		{
+			while (symbolCurrent != NULL)
+			{
+				Symbol* temp = symbolCurrent;
 
-                delete temp;
-            }
-        }
+				symbolCurrent = symbolCurrent->getPrev();
 
-        void addSymbol(string name, string datatype)
-        {            
-            Symbol newSymbol = new Symbol(name, datatype);
+				delete temp;
+			}
+		}
 
-            if (symbolHead == NULL)
-            {
-              symbolHead = newSymbol;
-              symbolCurrent = newSymbol;
-            }
-            else
-            {
-              symbolCurrent.setNext(newSymbol);
-              newSymbol.setPrev(symbolCurrent);
+		void addSymbol(string name, string datatype)
+		{
+			Symbol* newSymbol = new Symbol(name, datatype);
 
-              symbolCurrent = newSymbol;
-            }
-        }
+			if (symbolHead == NULL)
+			{
+				symbolHead = newSymbol;
+				symbolCurrent = newSymbol;
+			}
+			else
+			{
+				symbolCurrent->setNext(newSymbol);
+				newSymbol->setPrev(symbolCurrent);
 
-        bool assignSymbol(string name, string data)
-        {
-            Symbol* temp = symbolHead;
+				symbolCurrent = newSymbol;
+			}
+		}
 
-            while(temp != NULL)
-            {
-              if (temp.getName() == name)
-              {
-                temp.setData(data);
-                return true;
-              }
-              else
-              {
-                temp = temp.getNext();
-              }
-            }
+		bool assignSymbol(string name, string data)
+		{
+			Symbol* temp = symbolHead;
 
-            return false;
-        }
+			while (temp != NULL)
+			{
+				if (temp->getName() == name)
+				{
+					temp->setData(data);
+					return true;
+				}
+				else
+				{
+					temp = temp->getNext();
+				}
+			}
 
-        Symbol findSymbol(string name)
-        {
-            Symbol* temp = symbolHead;
+			return false;
+		}
 
-            while (temp != NULL)
-            {
-              if (temp.getName() != name)
-              {
-                temp = temp.getNext();
-              }
-              else
-              {
-                return temp;
-              }
-            }
-            
-            return NULL;
-        }        
+		Symbol* findSymbol(string name)
+		{
+			Symbol* temp = symbolHead;
 
-        void setNext(Scope* scope)
-        {
-          scopeNext = scope;
-        }
+			while (temp != NULL)
+			{
+				if (temp->getName() != name)
+				{
+					temp = temp->getNext();
+				}
+				else
+				{
+					return temp;
+				}
+			}
 
-        void setPrev(Scope* scope)
-        {
-          scopeNext = scope;
-        }
+			return NULL;
+		}
 
-        Scope* getNext()
-        {
-          return scopeNext;
-        }
+		void setNext(Scope* scope)
+		{
+			scopeNext = scope;
+		}
 
-        Scope* getPrev()
-        {
-          return scopePrev;
-        }
+		void setPrev(Scope* scope)
+		{
+			scopePrev = scope;
+		}
 
-    };    
+		Scope* getNext()
+		{
+			return scopeNext;
+		}
+
+		Scope* getPrev()
+		{
+			return scopePrev;
+		}
+
+		Symbol* getCurrentSymbol()
+		{
+			return symbolCurrent;
+		}
+	};
 
 public:
-    SymbolTable()
-    {
-        levelIndex = 0;
-        scopeHead = new Scope();
-        scopeCurrent = scopeHead;
-    }
+	SymbolTable()
+	{
+		levelIndex = 0;
+		scopeHead = new Scope();
+		scopeCurrent = scopeHead;
+	}
 
-    ~SymbolTable()
-    {
-        while(scopeCurrent != scopeHead)
-        {
-            END();
-        }
-        
-        Scope* temp = scopeCurrent;
+	~SymbolTable()
+	{
+		while (scopeCurrent != scopeHead)
+		{
+			END();
+		}
 
-        scopeCurrent = scopeCurrent->getPrev();
-        scopeCurrent->getNext() = NULL;
+		Scope* temp = scopeCurrent;
 
-        delete temp;
-    }
+		scopeCurrent = scopeCurrent->getPrev();
 
-    void run(string filename);
+		delete temp;
+	}
 
-    void addScope()
-    {
-        Scope newScope = new Scope();
+	void run(string filename);
 
-        scopeCurrent.setNext(newScope);
-        newScope.setPrev(scopeCurrent);
+	void addScope()
+	{
+		Scope* newScope = new Scope();
 
-        scopeCurrent = newScope;
-        ++levelIndex;
-    }
+		scopeCurrent->setNext(newScope);
+		newScope->setPrev(scopeCurrent);
 
-    bool INSERT(string name, string datatype)
-    {
-        if(scopeCurrent->findSymbol(name))
-            return false;
-        scopeCurrent.addSymbol(name, datatype);
-        return true;
-        
-    }
+		scopeCurrent = newScope;
+		++levelIndex;
+	}
 
-    int ASSIGN(string name, string value)
-    {   
-        Scope* temp = scopeCurrent;
-        
-        while (temp != NULL)
-        {
-            if (temp.findSymbol(name))
-            {
-                if(temp.findSymbol(name)->getDatatype == "number");
-                {
-                    for (int i = 0; i < value.length(); i++)
-                    {
-                        if(value[i] >= numericLowerBound && value[i] <= numericUpperBound);
-                        else
-                            return 2;
-                    }
-                    
-                    temp.assignSymbol(name, value)
-                    return 0;            
-                }
-                else
-                {
-                    if(value.back() == apostrophe && value.front() == apostrophe);
-                        temp.assignSymbol(name, value);
-                        return 0;
-                    else
-                        return 2;
-                }
-            }
-            else
-                temp = temp.getPrev();
-        }
-        // cant not find it
-        return 1;
-    }
+	bool INSERT(string name, string datatype)
+	{
+		if (scopeCurrent->findSymbol(name))
+			return false;
+		scopeCurrent->addSymbol(name, datatype);
+		return true;
 
-    int LOOKUP(string name)
-    {
-        Scope* temp = scopeCurrent;
-        for(int i = levelIndex; i >= 0; i--)
-        {
-            if(temp.findSymbol(name))
-                return i;
-            temp = temp->getPrev;
-        }
-        
-        return -1; 
-    }
+	}
 
-    
-    string PRINT()
-    {
-        Scope* scopeT = scopeCurrent;
-        Scope temp; 
-        string print = "";
+	int ASSIGN(string name, string value)
+	{
+		Scope* temp = scopeCurrent;
 
-        for(int i = levelIndex; i >= 0; i--)
-        {
-            // per scope
-            Symbol* symbolT = scopeT->symbolCurrent;
-            while(symbolT->getPrev() != NULL)
-            {
-                // per symbol in scope
-                if(temp.findSymbol(symbolT.getName()))
-                    temp.addSymbol(symbolT.getName,symbolT.getDatatype);
-                    print = print + symbolT.getName() + "//" + i + " ";
-                SymbolT = SymbolT->getPrev();
-            }
-            
-            scopeT = scopeT->getPrev();
-        }
+		while (temp != NULL)
+		{
+			if (temp->findSymbol(name))
+			{
+				if (temp->findSymbol(name)->getDatatype() == "number")
+				{
+					for (int i = 0; i < value.length(); i++)
+					{
+						if (value[i] >= numericLowerBound && value[i] <= numericUpperBound);
+						else
+							return 2;
+					}
 
-        print.erase(print.length() - 1, 1);
-        return print;
-    }
+					temp->assignSymbol(name, value);
+					return 0;
+				}
+				else
+				{
+					if (value.back() == apostrophe && value.front() == apostrophe)
+					{
+						temp->assignSymbol(name, value);
+						return 0;
+					}
+					else
+						return 2;
+				}
+			}
+			else
+				temp = temp->getPrev();
+		}
+		// cant not find it
+		return 1;
+	}
 
-    string RPRINT()
-    {
+	int LOOKUP(string name)
+	{
+		Scope* temp = scopeCurrent;
+		for (int i = levelIndex; i >= 0; i--)
+		{
+			if (temp->findSymbol(name))
+				return i;
+			temp = temp->getPrev();
+		}
 
-        Scope* scopeT = scopeCurrent;
-        Scope temp; 
-        string rprint = "";
+		return -1;
+	}
 
-        for(int i = levelIndex; i >= 0; i--)
-        {
-            // per scope
-            Symbol* symbolT = scopeT->symbolCurrent;
-            while(symbolT->getPrev() != NULL)
-            {
-                // per symbol in scope
-                if(temp.findSymbol(symbolT.getName()))
-                    temp.addSymbol(symbolT.getName,symbolT.getDatatype);
-                    rprint = symbolT.getName() + "//" + i + " " + rprint;
-                SymbolT = SymbolT->getPrev();
-            }
-            
-            scopeT = scopeT->getPrev();
-        }
 
-        rprint.erase(rprint.length() - 1, 1);
-        return rprint;
-    }
+	string PRINT()
+	{
+		Scope* scopeT = scopeCurrent;
+		Scope* temp = new Scope();
+		string print = "";
 
-    void BEGIN()
-    {
-        addScope();
-    }
+		for (int i = levelIndex; i >= 0; i--)
+		{
+			// per scope
+			Symbol* symbolT = scopeT->getCurrentSymbol();
+			while (symbolT != NULL)
+			{
+				// per symbol in scope
+				if (!temp->findSymbol(symbolT->getName()))
+				{
+					temp->addSymbol(symbolT->getName(), symbolT->getDatatype());
+					print = print + symbolT->getName() + "//" + to_string(i) + " ";
+				}
+				symbolT = symbolT->getPrev();
+			}
 
-    bool END()
-    {
-        if(scopeCurrent != scopeHead)
-        {
-            Scope* temp = scopeCurrent;
+			scopeT = scopeT->getPrev();
+		}
 
-            scopeCurrent = scopeCurrent->getPrev();
-            scopeCurrent->getNext() = NULL;
+		print.erase(print.length() - 1, 1);
+		return print;
+	}
 
-            levelIndex--;
-            delete temp;
+	string RPRINT()
+	{
+		Scope* scopeT = scopeCurrent;
+		Scope* temp = new Scope();
+		string rprint = "";
 
-            return true;
-        }
-        else 
-            return false;
-    }
+		for (int i = levelIndex; i >= 0; i--)
+		{
+			// per scope
+			Symbol* symbolT = scopeT->getCurrentSymbol();
+			while (symbolT != NULL)
+			{
+				// per symbol in scope
+				if (!temp->findSymbol(symbolT->getName()))
+				{
+					temp->addSymbol(symbolT->getName(), symbolT->getDatatype());
+					rprint = symbolT->getName() + "//" + to_string(i) + " " + rprint;
+				}
+				symbolT = symbolT->getPrev();
+			}
+			scopeT = scopeT->getPrev();
+		}
+
+		rprint.erase(rprint.length() - 1, 1);
+		return rprint;
+	}
+
+	void BEGIN()
+	{
+		addScope();
+	}
+
+	bool END()
+	{
+		if (scopeCurrent != scopeHead)
+		{
+			Scope* temp = scopeCurrent;
+
+			scopeCurrent = scopeCurrent->getPrev();
+			scopeCurrent->setNext(NULL);
+
+			levelIndex--;
+			delete temp;
+
+			return true;
+		}
+		else
+			return false;
+	}
 };
 
 #endif
