@@ -1,7 +1,16 @@
-INSERT x number
-INSERT y string
-ASSIGN x 15
+INSERT a string
+INSERT b number
 BEGIN
-INSERT y number
-RPRINT
+INSERT c number
+ASSIGN b 12
+BEGIN
+INSERT a number
+BEGIN
+ASSIGN c 14
+LOOKUP a
+LOOKUP b
+PRINT
+END
+END
+LOOKUP a
 END

@@ -1,5 +1,5 @@
 #include "SymbolTable.h"
-#include "SymbolTable.cpp"
+//#include "SymbolTable.cpp"
 using namespace std;
 
 void test(string filename)
@@ -38,6 +38,7 @@ void validSubmittedFiles(string filename, string *allowedIncludingFiles, int num
 
 int main(int argc, char **argv)
 {
+    /*
     if (argc < 2)
         return 1;
 
@@ -49,4 +50,9 @@ int main(int argc, char **argv)
     test(argv[1]);
 
     return 0;
+    */
+    
+
+    SymbolTable test;
+    test.run("./testcase/test5.txt");
 }

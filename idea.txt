@@ -1,5 +1,6 @@
-﻿SymbolTable
-	Symbol
+SymbolTable (List of scope)
+	
+  Symbol
 		name
 		datatype
 		T value
@@ -72,3 +73,71 @@
 		}
 	
 		cout << x;		// 2
+
+    PRINT 
+      traverse choronological
+        put names ("name//level") in a queue
+          jump
+      traverse
+        if 
+
+    
+    PRINT 
+    
+      Symbol * temp = NULL;
+      symbol counter = nameCounter;
+      string* names = new string[nameCounter];
+      
+      
+      while ( scopeCurrent->symbolCurrent != symbolhead)
+        for (int i)
+          string [i] == symbol name;
+          break;
+        string[counter] = Symbol name;
+        counter--;
+      // now we have the names list 
+      for ( 1 to level index)
+
+
+    Symbol 
+    bool original;
+
+    print inside of Scope;
+    string print;
+      if(original)
+        skip
+      else
+        print = symbolCurrent.name + print
+
+
+    a b c d
+      a b c
+          c e
+
+
+    SymbolTable::Print()
+    {
+      Scope scopeForPrinting
+      
+      for scope in innerScope to outerScope                      // nguoc chieu list
+      {
+        for symbol in scope.symbolLast to scope.symbolStart)     // nguoc chieu list
+        {
+          if (!scopeForPrinting.findSymbol(symbol.name))
+          {
+            string print = print + name//levelindex;
+          }
+        }
+      }
+
+      cout << "x//0"
+      delete scopeForPrinting;
+    }
+
+    
+    INSERT return.
+    ASSIGN typemismatch -> ASSIGN -> findSymbol adjust. 
+
+    ASSIGN value covert (?) new way to check digit 
+
+    
