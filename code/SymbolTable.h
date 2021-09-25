@@ -34,64 +34,19 @@ private:
 		Symbol* symbolNext;
 		Symbol* symbolPrev;
 	public:
-		Symbol(string name, string datatype)
-		{
-			this->name = name;
-			this->datatype = datatype;
-			symbolNext = NULL;
-			symbolPrev = NULL;
-			data = "";
-		}
+		Symbol(string name, string datatype);
 
-		void setName(string name)
-		{
-			this->name = name;
-		}
+		void adjustName(string name);
+		void adjustDatatype(string datatype);
+		void adjustData(string data);
+		void adjustNext(Symbol* symbol);
+		void adjustPrev(Symbol* symbol);
 
-		void setDatatype(string datatype)
-		{
-			this->datatype = datatype;
-		}
-
-		void setData(string data)
-		{
-			this->data = data;
-		}
-
-		void setNext(Symbol* symbol)
-		{
-			symbolNext = symbol;
-		}
-
-		void setPrev(Symbol* symbol)
-		{
-			symbolPrev = symbol;
-		}
-
-		string getName()
-		{
-			return this->name;
-		}
-
-		string getDatatype()
-		{
-			return this->datatype;
-		}
-
-		string getData()
-		{
-			return this->data;
-		}
-
-		Symbol* getNext()
-		{
-			return symbolNext;
-		}
-
-		Symbol* getPrev()
-		{
-			return symbolPrev;
-		}
+		string getName();
+		string getDatatype();
+		string getData();
+		Symbol* getNext();
+		Symbol* getPrev();
 	};
 
 	class Scope
@@ -102,107 +57,19 @@ private:
 		Scope* scopeNext;
 		Scope* scopePrev;
 	public:
-		Scope()
-		{
-			symbolHead = NULL;
-			symbolCurrent = NULL;
-			scopeNext = NULL;
-			scopePrev = NULL;
-		}
+		Scope();
+		~Scope();
 
-		~Scope()
-		{
-			while (symbolCurrent != NULL)
-			{
-				Symbol* temp = symbolCurrent;
+		void addSymbol(string name, string datatype);
+		bool assignSymbol(string name, string data);
+		Symbol* findSymbol(string name);
 
-				symbolCurrent = symbolCurrent->getPrev();
+		void adjustNext(Scope* scope);
+		void adjustPrev(Scope* scope);
 
-				delete temp;
-			}
-		}
-
-		void addSymbol(string name, string datatype)
-		{
-			Symbol* newSymbol = new Symbol(name, datatype);
-
-			if (symbolHead == NULL)
-			{
-				symbolHead = newSymbol;
-				symbolCurrent = newSymbol;
-			}
-			else
-			{
-				symbolCurrent->setNext(newSymbol);
-				newSymbol->setPrev(symbolCurrent);
-
-				symbolCurrent = newSymbol;
-			}
-		}
-
-		bool assignSymbol(string name, string data)
-		{
-			Symbol* temp = symbolHead;
-
-			while (temp != NULL)
-			{
-				if (temp->getName() == name)
-				{
-					temp->setData(data);
-					return true;
-				}
-				else
-				{
-					temp = temp->getNext();
-				}
-			}
-
-			return false;
-		}
-
-		Symbol* findSymbol(string name)
-		{
-			Symbol* temp = symbolHead;
-
-			while (temp != NULL)
-			{
-				if (temp->getName() != name)
-				{
-					temp = temp->getNext();
-				}
-				else
-				{
-					return temp;
-				}
-			}
-
-			return NULL;
-		}
-
-		void setNext(Scope* scope)
-		{
-			scopeNext = scope;
-		}
-
-		void setPrev(Scope* scope)
-		{
-			scopePrev = scope;
-		}
-
-		Scope* getNext()
-		{
-			return scopeNext;
-		}
-
-		Scope* getPrev()
-		{
-			return scopePrev;
-		}
-
-		Symbol* getCurrentSymbol()
-		{
-			return symbolCurrent;
-		}
+		Scope* getNext();
+		Scope* getPrev();
+		Symbol* getCurrentSymbol();
 	};
 
 public:

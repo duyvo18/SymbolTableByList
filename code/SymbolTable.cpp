@@ -200,7 +200,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 	{
 		if (identifier->getDatatype() == "string")
 		{
-			identifier->setData(value);
+			identifier->adjustData(value);
 			return 0;
 		}
 		else
@@ -210,7 +210,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 	{
 		if (identifier->getDatatype() == "number")
 		{
-			identifier->setData(value);
+			identifier->adjustData(value);
 			return 0;
 		}
 		else
@@ -227,7 +227,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 
 		if (valueIden->getDatatype() == identifier->getDatatype())
 		{
-			identifier->setData(valueIden->getData());
+			identifier->adjustData(valueIden->getData());
 			return 0;
 		}
 		else
@@ -300,7 +300,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 			}
 
 
-			identifier->setData(value);
+			identifier->adjustData(value);
 			return 0;
 		}
 		else
@@ -317,7 +317,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 						return 1;
 				}
 
-				identifier->setData(value);
+				identifier->adjustData(value);
 				return 0;
 			}
 			else
@@ -344,7 +344,7 @@ int SymbolTable::ASSIGN(string name, string value) {
 	{
 		if (valueIden->getDatatype() == identifier->getDatatype())
 		{
-			identifier->setData(valueIden->getData());
+			identifier->adjustData(valueIden->getData());
 			return 0;
 		}
 		else
@@ -481,7 +481,7 @@ bool SymbolTable::END() {
 		Scope* temp = scopeCurrent;
 
 		scopeCurrent = scopeCurrent->getPrev();
-		scopeCurrent->setNext(NULL);
+		scopeCurrent->adjustNext(NULL);
 
 		levelIndex--;
 		delete temp;
@@ -493,7 +493,7 @@ bool SymbolTable::END() {
 }
 
 bool SymbolTable::isNum(string str) {
-	for (int i = 0; i < str.length(); i++)
+	for (size_t i = 0; i < str.length(); i++)
 	{
 		if (str[i] < numericLowerBound || str[i] > numericUpperBound)
 			return false;
@@ -504,7 +504,7 @@ bool SymbolTable::isNum(string str) {
 bool SymbolTable::isStr(string value) {
 	if (value.back() == apostrophe && value.front() == apostrophe)
 	{
-		for (int i = 1; i < value.length() - 1; i++)
+		for (size_t i = 1; i < value.length() - 1; i++)
 		{
 			if (value[i] >= lowercaseLowerBound && value[i] <= lowercaseUpperBound);
 			else if (value[i] >= numericLowerBound && value[i] <= numericUpperBound);
@@ -522,7 +522,7 @@ bool SymbolTable::isStr(string value) {
 bool SymbolTable::isIden(string value) {
 	if (value[0] >= lowercaseLowerBound && value[0] <= lowercaseUpperBound)
 	{
-		for (int i = 0; i < value.length(); i++)
+		for (size_t i = 0; i < value.length(); i++)
 		{
 			if (value[i] >= lowercaseLowerBound && value[i] <= lowercaseUpperBound);
 			else if (value[i] >= uppercaseLowerBound && value[i] <= uppercaseUpperBound);
@@ -540,8 +540,8 @@ bool SymbolTable::isIden(string value) {
 void SymbolTable::addScope() {
 	Scope* newScope = new Scope();
 
-	scopeCurrent->setNext(newScope);
-	newScope->setPrev(scopeCurrent);
+	scopeCurrent->adjustNext(newScope);
+	newScope->adjustPrev(scopeCurrent);
 
 	scopeCurrent = newScope;
 	++levelIndex;
@@ -563,4 +563,165 @@ SymbolTable::Symbol* SymbolTable::findIden(string name) {
 	}
 
 	return iden;
+}
+
+
+SymbolTable::Symbol::Symbol(string name, string datatype) {
+	this->name = name;
+	this->datatype = datatype;
+	symbolNext = NULL;
+	symbolPrev = NULL;
+	data = "";
+}
+
+void SymbolTable::Symbol::adjustName(string name) {
+	this->name = name;
+}
+
+void SymbolTable::Symbol::adjustDatatype(string datatype) {
+	this->datatype = datatype;
+}
+
+void SymbolTable::Symbol::adjustData(string data) {
+	this->data = data;
+}
+
+void SymbolTable::Symbol::adjustNext(Symbol* symbol) {
+	symbolNext = symbol;
+}
+
+
+
+void SymbolTable::Symbol::adjustPrev(Symbol* symbol)
+{
+	symbolPrev = symbol;
+}
+
+string SymbolTable::Symbol::getName()
+{
+	return this->name;
+}
+
+string SymbolTable::Symbol::getDatatype()
+{
+	return this->datatype;
+}
+
+string SymbolTable::Symbol::getData()
+{
+	return this->data;
+}
+
+SymbolTable::Symbol* SymbolTable::Symbol::getNext()
+{
+	return symbolNext;
+}
+
+SymbolTable::Symbol* SymbolTable::Symbol::getPrev()
+{
+	return symbolPrev;
+}
+
+
+
+SymbolTable::Scope::Scope()
+{
+	symbolHead = NULL;
+	symbolCurrent = NULL;
+	scopeNext = NULL;
+	scopePrev = NULL;
+}
+
+SymbolTable::Scope::~Scope()
+{
+	while (symbolCurrent != NULL)
+	{
+		Symbol* temp = symbolCurrent;
+
+		symbolCurrent = symbolCurrent->getPrev();
+
+		delete temp;
+	}
+}
+
+void SymbolTable::Scope::addSymbol(string name, string datatype)
+{
+	Symbol* newSymbol = new Symbol(name, datatype);
+
+	if (symbolHead == NULL)
+	{
+		symbolHead = newSymbol;
+		symbolCurrent = newSymbol;
+	}
+	else
+	{
+		symbolCurrent->adjustNext(newSymbol);
+		newSymbol->adjustPrev(symbolCurrent);
+
+		symbolCurrent = newSymbol;
+	}
+}
+
+bool SymbolTable::Scope::assignSymbol(string name, string data)
+{
+	Symbol* temp = symbolHead;
+
+	while (temp != NULL)
+	{
+		if (temp->getName() == name)
+		{
+			temp->adjustData(data);
+			return true;
+		}
+		else
+		{
+			temp = temp->getNext();
+		}
+	}
+
+	return false;
+}
+
+SymbolTable::Symbol* SymbolTable::Scope::findSymbol(string name)
+{
+	Symbol* temp = symbolHead;
+
+	while (temp != NULL)
+	{
+		if (temp->getName() != name)
+		{
+			temp = temp->getNext();
+		}
+		else
+		{
+			return temp;
+		}
+	}
+
+	return NULL;
+}
+
+void SymbolTable::Scope::adjustNext(Scope* scope)
+{
+	scopeNext = scope;
+}
+
+void SymbolTable::Scope::adjustPrev(Scope* scope)
+{
+	scopePrev = scope;
+}
+
+SymbolTable::Scope* SymbolTable::Scope::getNext()
+{
+	return scopeNext;
+}
+
+SymbolTable::Scope* SymbolTable::Scope::getPrev()
+{
+	return scopePrev;
+}
+
+SymbolTable::Symbol* SymbolTable::Scope::getCurrentSymbol()
+{
+	return symbolCurrent;
 }
