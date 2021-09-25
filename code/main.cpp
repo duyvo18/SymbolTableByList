@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	validSubmittedFiles("SymbolTable.cpp", allowedCPP);
 	//test(argv[1]);
 
-	test("./testcase/test5.txt");
+	test("./testcase/test4.txt");
 
 	return 0;
 }

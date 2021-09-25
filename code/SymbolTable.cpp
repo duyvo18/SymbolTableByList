@@ -429,7 +429,7 @@ string SymbolTable::PRINT() {
 			if (!temp->findSymbol(symbolT->getName()))
 			{
 				temp->addSymbol(symbolT->getName(), symbolT->getDatatype());
-				print = print + symbolT->getName() + "//" + to_string(i) + " ";
+				print = symbolT->getName() + "//" + to_string(i) + " " + print;
 			}
 			symbolT = symbolT->getPrev();
 		}
@@ -458,7 +458,7 @@ string SymbolTable::RPRINT() {
 			if (!temp->findSymbol(symbolT->getName()))
 			{
 				temp->addSymbol(symbolT->getName(), symbolT->getDatatype());
-				rprint = symbolT->getName() + "//" + to_string(i) + " " + rprint;
+				rprint = rprint + symbolT->getName() + "//" + to_string(i) + " ";
 			}
 			symbolT = symbolT->getPrev();
 		}
