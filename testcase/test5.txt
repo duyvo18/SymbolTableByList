@@ -1,10 +1,2 @@
 INSERT x number
-INSERT y string
-ASSIGN x 15
-BEGIN
-INSERT y number
-INSERT x string
-LOOKUP y
-LOOKUP x
-END
-LOOKUP x
+ASSIGN x
